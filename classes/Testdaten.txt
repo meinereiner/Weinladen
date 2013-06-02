@@ -1,0 +1,13 @@
+﻿INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Spätburgunder', '2011', 'Rotwein', 'Burgund', 'Frankreich', 'angenehme Fruchtigkeit', 5.00);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Bardolino', '2012', 'Rotwein', 'Bardolino', 'Italien', 'Trockener Rotwein optimal zu Nudelgerichten', 4.20);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Dornfelder', '2009', 'Rotwein', ' Rhein-Hessen', 'Deutschland', 'Körperlicher Wein mit milder säure', 2.99);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Chianti', '2008', 'Rotwein', 'Toskana', 'Italien', 'harmonisch, herb, würzig, leichte Tannine mit samtigem Abgang', 4.60);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Helfensteiner', '2005', 'Rotwein', 'Württemberg', 'Deutschland', 'Ein harmonischer Rotwein', 7.10);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Tokajer', '1998', 'Weißwein', 'Tokaj', 'Ungarn', 'Satte heugelbe Farbe, mittelkräftig, schöne Säure', 3.75);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Riesling', '2003', 'Weißwein', 'Rhein', 'Deutschland', 'Fruchtige Aromen, wie Grapefruit, Limone und Zitrone', 5.10);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Marsala', '2011', 'Weißwein', 'Sizilien', 'Italien', 'Der Marsala erinnert leicht an den Sherry', 3.20);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Macabeo', '2012', 'Weißwein', 'Penedes', 'Spanien', 'Feinnervig, spritzig, leicht, rassig, sehr elegant ', 4.25);
+INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) values ('Grauburgunder', '2009', 'Weißwein', 'Pfalz', 'Deutschland', 'Unkompliziert, leicht und fruchtig ', 4.50);
+INSERT INTO benutzer (benutzername, admin, e_mail, newsletter, passwort) values ('Simon', TRUE, 'simon@gmail.com', TRUE, '387e6a49c77af9f5078c2a2bd175c82f0f0925aab402b8b200cb088caf4b3113');
+INSERT INTO benutzer (benutzername, admin, e_mail, newsletter, passwort) values ('Eric', TRUE, 'eric@gmail.com', TRUE, '4cb562ff4f5ea16e92c4adab5c4c66a15f8f36bdecf466b4a2c6d40bc91f66dd');
+INSERT INTO benutzer (benutzername, admin, e_mail, newsletter, passwort) values ('Max', FALSE, 'max@gmail.com', TRUE, 'c9ff763e960d3ab27367f2a44b5ae26d0d8e5aae790c81ed0e796bea21f83874');
