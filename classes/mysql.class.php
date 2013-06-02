@@ -342,6 +342,8 @@ class mysql
 		$query = "SELECT * FROM wein";
 		$result = $this->sendtodb2($query);
 		
+		echo " <form> 
+			";
 		
 		while($row = mysql_fetch_assoc($result))
 		{
@@ -357,17 +359,16 @@ class mysql
 			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
 			echo "		<li>" . $row["land"] . "</li>\n";
 			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
-			if( $_SESSION.['angemeldet'] == true)
-			{
-				echo "	<li>" . '<input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen">"' . "</li>";
-			}
-			echo "</tr>";
-			echo "		<li>" . $row["beschreibung"] . "</li>\n";
+			
+			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+			echo "	<li>" . $row["beschreibung"] . "</li>\n";
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
-		
+		echo "</form>";
+		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
 	}
 	
 	public function winelistbyname($namearray)
