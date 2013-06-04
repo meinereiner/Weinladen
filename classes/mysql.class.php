@@ -252,6 +252,7 @@ class mysql
 			echo "	<td>" . $row["land"] . "</td>";
 			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "€</td>";
 			echo "	<td>" . $row["beschreibung"] . "</td>";
+			echo "</tr>";
 		}
 		echo "</table>";
 	}
@@ -341,10 +342,70 @@ class mysql
 	{
 		$query = "SELECT * FROM wein";
 		$result = $this->sendtodb2($query);
+		echo "<form>"; 
 		
-		echo " <form> 
-			";
+		while($row = mysql_fetch_assoc($result))
+		{
+			
+			echo "<div class='divWeineintrag'>\n";
+			echo "	<h3>" . $row["name"] . "</h3>\n";
+			echo "	<img src='./images/weinbild.jpg' />\n";
+			echo "	<ul class='ulWeineigenschaften'>\n";
+			
+			echo "		<li>" . $row["name"] . "</li>\n";		
+			echo "		<li>" . $row["jahrgang"] . "</li>\n";
+			echo "		<li>" . $row["typ"] . "</li>\n";
+			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
+			echo "		<li>" . $row["land"] . "</li>\n";
+			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
+						
+			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
+			
+			echo "	</ul>\n";
+			echo "</div>\n";
+		}
+		echo "</form>";
+		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
+	}
+	
+	public function winesorted($type = "", $land = "", $price = "")
+	{
+		$and = FALSE;
+		$query = "SELECT * FROM wein ";
+		if($type!="")
+		{
+			$query .= "WHERE typ = '$type' "; 
+			$and = TRUE;
+		}
+		if($land!="")
+		{
+			if($and)
+			{
+				$query .= "AND land = '$land' ";
+			}
+			else
+			{
+				$query .= "WHERE land = '$land' ";
+			}			
+			$and = TRUE;
+		}
+		if($price!="")
+		{
+			if($and)
+			{
+				$query .= "AND preis < $price ";
+			}
+			else
+			{		
+				$query .= "WHERE preis < $price "; 
+			}
+		}		
 		
+		
+		$result = $this->sendtodb2($query);
+		echo "<form>"; 
 		while($row = mysql_fetch_assoc($result))
 		{
 			
@@ -362,13 +423,13 @@ class mysql
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
 				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
-			echo "	<li>" . $row["beschreibung"] . "</li>\n";
+			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
 		echo "</form>";
-		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
+		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';		
 	}
 	
 	public function winelistbyname($namearray)
@@ -413,6 +474,159 @@ class mysql
 		echo "</div>\n";
 	}
 	
+	public function createorder($username, $winearray) 
+	{
+		//Datum erstellen
+		$timestamp = time(); //aktuelles Datum ermitteln
+		$datum = date("Y-m-d G:i:s",$timestamp);	//Datum ins mysql-date format konvertieren
+		
+		//Benutzerid speichern
+		$query = "SELECT idbenutzer FROM benutzer WHERE benutzername='$username'";
+		$result = $this->sendtodb2($query);
+		$id = mysql_result($result, 0);
+		
+		//query erzeugen
+		$query = "INSERT INTO bestellung (benutzer_idbenutzer, datum) ";
+		$query .= "values ('$id', '$datum')";
+
+		//Datenbankanfrage senden
+		$result = $this->sendtodb2($query);
+		//id der Bestellung speichern
+		$idbestellung = mysql_insert_id();
+		
+		//Alle Weine aus der db auslesen
+		//query erzeugen
+		$query = "SELECT name, idwein FROM wein";
+		$result = $this->sendtodb2($query);
+		//Array mit [name] und id speichern
+		while($row = mysql_fetch_assoc($result))
+		{
+			$allwinearray[$row["name"]] = $row["idwein"];
+		}
+		
+		
+		//Weine der Bestellung speichern
+		for($i = 0;$i < count($winearray);$i ++)
+		{
+			//Weinid speichern
+			$idwein = $allwinearray[$winearray[$i]];
+			$query = "INSERT INTO artikel (wein_idwein, bestellung_idbestellung) ";
+			$query .= "VALUES ($idwein, $idbestellung); ";
+			$this->sendtodb($query);
+		}
+			
+	
+	}
+	
+	//Übersicht der Bestellungen eines Kunden
+	public function getorder()
+	{
+		
+		//query erzeugen
+		$query = "SELECT * FROM bestellung WHERE benutzer_idbenutzer = $this->id";
+		//Datenbankanfrage senden
+		$result = $this->sendtodb2($query);		
+		
+		while($row = mysql_fetch_assoc($result))
+		{
+			$sumprice = 0;
+			$count = 0;
+			//Tabelle erzeugen
+			echo "<table border='1'>";
+			//Überschrift erzeugen
+			echo "<tr>\n";
+			echo "<td>Bestellnummer: " . $row["idbestellung"] . "</td><td>Datum : " . $row["datum"] . "</td>\n";
+			echo "</tr>\n";
+			echo "<tr>\n";
+			echo "<td>Weinname</td><td>Preis</td>";
+			echo "</tr>\n";
+			//Weine abfragen
+			$query = "SELECT wein_idwein FROM artikel WHERE bestellung_idbestellung = " . $row["idbestellung"];
+			//Datenbankanfrage senden
+			$result2 = $this->sendtodb2($query);	
+			while($row2 = mysql_fetch_assoc($result2))
+			{
+				$count++;
+				$query = "SELECT name, preis FROM wein WHERE idwein = " . $row2["wein_idwein"];
+				//Datenbankanfrage senden
+				$result3 = $this->sendtodb2($query);	
+				$row3 = mysql_fetch_assoc($result3);
+				echo "<tr>\n";
+				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "€</td>\n";
+				echo "</tr>\n";
+				//Preis speichern
+				$sumprice += $row3["preis"];
+			}
+			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "€</td>\n"; 		
+			echo "</tr>\n";
+			echo "</table>\n";
+			echo "<br>\n";
+		}
+		
+	
+	}
+	 
+	//Übersicht der Bestellungen aller Kunden
+	public function orderoverview()
+	{
+		//Alle Namen aus der db auslesen
+		//query erzeugen
+		$query = "SELECT benutzername, idbenutzer FROM benutzer";
+		$result = $this->sendtodb2($query);
+		//Array mit [id] und name speichern
+		while($row = mysql_fetch_assoc($result))
+		{
+			$alluserarray[$row["idbenutzer"]] = $row["benutzername"];
+		}
+				
+		//query erzeugen
+		$query = "SELECT * FROM bestellung";
+		//Datenbankanfrage senden
+		$result = $this->sendtodb2($query);		
+		
+		while($row = mysql_fetch_assoc($result))
+		{
+			$sumprice = 0;
+			$count = 0;
+			$username = $alluserarray[$row["benutzer_idbenutzer"]];
+			
+			//Tabelle erzeugen
+			echo "<table border='1' width = '450'>";
+			//Überschrift erzeugen
+			echo "<tr>\n";
+			echo "<td>Benutzername:</td><td>" . $username . "</td>\n";
+			echo "</tr>\n";
+			echo "<tr>\n";
+			echo "<td>Bestellnummer: " . $row["idbestellung"] . "</td><td>Datum : " . $row["datum"] . "</td>\n";
+			echo "</tr>\n";
+			echo "<tr>\n";
+			echo "<td>Weinname</td><td>Preis</td>";
+			echo "</tr>\n";
+			//Weine abfragen
+			$query = "SELECT wein_idwein FROM artikel WHERE bestellung_idbestellung = " . $row["idbestellung"];
+			//Datenbankanfrage senden
+			$result2 = $this->sendtodb2($query);	
+			while($row2 = mysql_fetch_assoc($result2))
+			{
+				$count++;
+				$query = "SELECT name, preis FROM wein WHERE idwein = " . $row2["wein_idwein"];
+				//Datenbankanfrage senden
+				$result3 = $this->sendtodb2($query);	
+				$row3 = mysql_fetch_assoc($result3);
+				echo "<tr>\n";
+				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "€</td>\n";
+				echo "</tr>\n";
+				//Preis speichern
+				$sumprice += $row3["preis"];
+			}
+			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "€</td>\n"; 		
+			echo "</tr>\n";
+			echo "</table>\n";
+			echo "<br>\n";
+		}
+		
+	
+	}
 	
     //Verbindung zur db trennen
     public function close_connect()

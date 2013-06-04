@@ -8,7 +8,7 @@ echo'
 ';
 $sql = new mysql();
 $sql->login("Simon","qwertz");
-$sql->winelist();
+$sql->winesorted();
 $sql->close_connect();
 		  
 include "./common/navigationFooter.php";
