@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 class mysql
 {
     //DB Daten eingeben
@@ -9,7 +9,7 @@ class mysql
     private $conn_id   = null; 
     private $injection ='';
  
-	//Felder die nach dem login benutzt werden können
+	//Felder die nach dem login benutzt werden kÃ¶nnen
 	private $name;
 	private $admin = "FALSE";
 	private $id = "GAST";
@@ -41,7 +41,7 @@ class mysql
 		{
 			$landarray[] = $row["land"];
 		}
-		//doppelte einträge entfernen
+		//doppelte eintrÃ¤ge entfernen
 		$landarray = array_unique($landarray);
 		//Index korrigieren durch umkopieren
 		foreach ($landarray as $arr) 
@@ -62,7 +62,7 @@ class mysql
 		{
 			$typesarray[] = $row["typ"];
 		}
-		//doppelte einträge entfernen
+		//doppelte eintrÃ¤ge entfernen
 		$typesarray = array_unique($typesarray);
 		//Index korrigieren durch umkopieren
 		foreach ($typesarray as $arr) 
@@ -79,7 +79,7 @@ class mysql
     {
 		//Session zu db Aufbauen
 		$this->conn_id = mysql_connect($this->host,$this->user,$this->passwort);
-		//db auswählen
+		//db auswÃ¤hlen
 		mysql_select_db($this->dbname,$this->conn_id);
 		
 		//Abfrage ob Verbindund ok	
@@ -90,7 +90,7 @@ class mysql
 		}     
 	}
 		
-    //query an db senden für Einträge
+    //query an db senden fÃ¼r EintrÃ¤ge
     private function sendtodb($query)
     {
 		//Datenbankanfrage senden
@@ -109,7 +109,7 @@ class mysql
         }
     }
 	
-	//query an db senden für Abfragen
+	//query an db senden fÃ¼r Abfragen
     private function sendtodb2($query)
     {
 		//Datenbankanfrage senden
@@ -128,7 +128,7 @@ class mysql
         }
     }
 
-    //Benutzer hinzufügen
+    //Benutzer hinzufÃ¼gen
     public function adduser($benutzername,$admin, $e_mail, $newsletter, $passwort)
     {
         //Abfrage ob user schon vorhanden
@@ -177,7 +177,7 @@ class mysql
 	
 	
 	
-    //Nachricht hinzufügen max. 1000 Zeichen
+    //Nachricht hinzufÃ¼gen max. 1000 Zeichen
     public function addnote($nachricht)
     {
 		$timestamp = time(); //aktuelles Datum ermitteln
@@ -190,7 +190,7 @@ class mysql
 		return $this->sendtodb($query);
     }
 	
-	//Wein hinzufügen
+	//Wein hinzufÃ¼gen
 	public function addwine($name, $jahrgang, $typ, $anbaugebiet, $land, $beschreibung, $preis)
 	{
 		$query = "INSERT INTO wein (name, jahrgang, typ, anbaugebiet, land, beschreibung, preis) ";
@@ -199,7 +199,7 @@ class mysql
 		return $this->sendtodb($query);
     }
 	
-	//Benutzerlogin überprüfen	Rückgabeparameter 	TRUE, ADMIN oder Fehlermeldung als String
+	//Benutzerlogin Ã¼berprÃ¼fen	RÃ¼ckgabeparameter 	TRUE, ADMIN oder Fehlermeldung als String
 	public function login($name, $passwort)
 	{
 		$query = "SELECT idbenutzer FROM benutzer WHERE benutzername='$name' AND passwort='$passwort'";
@@ -250,7 +250,7 @@ class mysql
 			echo "	<td>" . $row["typ"] . "</td>";
 			echo "	<td>" . $row["anbaugebiet"] . "</td>";
 			echo "	<td>" . $row["land"] . "</td>";
-			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "€</td>";
+			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "â‚¬</td>";
 			echo "	<td>" . $row["beschreibung"] . "</td>";
 			echo "</tr>";
 		}
@@ -278,7 +278,7 @@ class mysql
 			echo "	<td>" . $row["typ"] . "</td>";
 			echo "	<td>" . $row["anbaugebiet"] . "</td>";
 			echo "	<td>" . $row["land"] . "</td>";
-			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "€</td>";
+			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "â‚¬</td>";
 			echo "	<td>" . $row["beschreibung"] . "</td>";
 			echo "</tr>";
 		}
@@ -306,7 +306,7 @@ class mysql
 			echo "	<td>" . $row["typ"] . "</td>";
 			echo "	<td>" . $row["anbaugebiet"] . "</td>";
 			echo "	<td>" . $row["land"] . "</td>";
-			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "€</td>";
+			echo "	<td>" . number_format($row["preis"], 2, ',', '') . "â‚¬</td>";
 			echo "	<td>" . $row["beschreibung"] . "</td>";
 			echo "</tr>";
 		}
@@ -330,7 +330,7 @@ class mysql
 			echo $row["typ"] . ";";
 			echo $row["anbaugebiet"] . ";";
 			echo $row["land"] . ";";
-			echo number_format($row["preis"], 2, ',', '') . "€;";
+			echo number_format($row["preis"], 2, ',', '') . "â‚¬;";
 			echo $row["beschreibung"];
 			if($i<=$count)
 				echo "\n";
@@ -357,17 +357,17 @@ class mysql
 			echo "		<li>" . $row["typ"] . "</li>\n";
 			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
 			echo "		<li>" . $row["land"] . "</li>\n";
-			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
+			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "â‚¬</li>\n";
 						
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="HinzufÃ¼gen"> In Warenkorb </li>';
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
 		echo "</form>";
-		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
+		echo ' <input id="warenkorbButton" type="submit" value="HinzufÃ¼gen" />';
 	}
 	
 	public function winesorted($type = "", $land = "", $price = "")
@@ -419,17 +419,18 @@ class mysql
 			echo "		<li>" . $row["typ"] . "</li>\n";
 			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
 			echo "		<li>" . $row["land"] . "</li>\n";
-			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
+			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "â‚¬</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="HinzufÃ¼gen"> In Warenkorb </li>';
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
-		echo "</form>";
-		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';		
+		if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
+			echo ' <input id="warenkorbButton" type="submit" value="HinzufÃ¼gen" onclick="BestellungAbsenden" />';
+		echo "</form>";			
 	}
 	
 	public function winelistbyname($namearray)
@@ -450,7 +451,7 @@ class mysql
 			echo "		<li>" . $row["typ"] . "</li>\n";
 			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
 			echo "		<li>" . $row["land"] . "</li>\n";
-			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
+			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "â‚¬</li>\n";
 			echo "		<li>" . $row["beschreibung"] . "</li>\n";
 			
 			echo "	</ul>\n";
@@ -518,7 +519,7 @@ class mysql
 	
 	}
 	
-	//Übersicht der Bestellungen eines Kunden
+	//Ãœbersicht der Bestellungen eines Kunden
 	public function getorder()
 	{
 		
@@ -533,7 +534,7 @@ class mysql
 			$count = 0;
 			//Tabelle erzeugen
 			echo "<table border='1'>";
-			//Überschrift erzeugen
+			//Ãœberschrift erzeugen
 			echo "<tr>\n";
 			echo "<td>Bestellnummer: " . $row["idbestellung"] . "</td><td>Datum : " . $row["datum"] . "</td>\n";
 			echo "</tr>\n";
@@ -552,12 +553,12 @@ class mysql
 				$result3 = $this->sendtodb2($query);	
 				$row3 = mysql_fetch_assoc($result3);
 				echo "<tr>\n";
-				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "€</td>\n";
+				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "â‚¬</td>\n";
 				echo "</tr>\n";
 				//Preis speichern
 				$sumprice += $row3["preis"];
 			}
-			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "€</td>\n"; 		
+			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "â‚¬</td>\n"; 		
 			echo "</tr>\n";
 			echo "</table>\n";
 			echo "<br>\n";
@@ -566,7 +567,7 @@ class mysql
 	
 	}
 	 
-	//Übersicht der Bestellungen aller Kunden
+	//Ãœbersicht der Bestellungen aller Kunden
 	public function orderoverview()
 	{
 		//Alle Namen aus der db auslesen
@@ -592,7 +593,7 @@ class mysql
 			
 			//Tabelle erzeugen
 			echo "<table border='1' width = '450'>";
-			//Überschrift erzeugen
+			//Ãœberschrift erzeugen
 			echo "<tr>\n";
 			echo "<td>Benutzername:</td><td>" . $username . "</td>\n";
 			echo "</tr>\n";
@@ -614,12 +615,12 @@ class mysql
 				$result3 = $this->sendtodb2($query);	
 				$row3 = mysql_fetch_assoc($result3);
 				echo "<tr>\n";
-				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "€</td>\n";
+				echo "<td>" . $row3["name"] . "</td><td>" . number_format($row3["preis"], 2, ',', '') . "â‚¬</td>\n";
 				echo "</tr>\n";
 				//Preis speichern
 				$sumprice += $row3["preis"];
 			}
-			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "€</td>\n"; 		
+			echo "<td>" . $count . " Artikel</td><td>Gesamtpreis: " . number_format($sumprice, 2, ',', '') . "â‚¬</td>\n"; 		
 			echo "</tr>\n";
 			echo "</table>\n";
 			echo "<br>\n";
