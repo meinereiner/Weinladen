@@ -405,7 +405,7 @@ class mysql
 		
 		
 		$result = $this->sendtodb2($query);
-		echo '<form action="common/warenkorbUpdaten.php">'; 
+		echo '<form action="warenkorb.php" method="post">'; 
 		while($row = mysql_fetch_assoc($result))
 		{
 			
@@ -422,14 +422,14 @@ class mysql
 			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
 		if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-			echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" onclick="BestellungAbsenden" />';
+			echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen"/>';
 		echo "</form>";			
 	}
 	

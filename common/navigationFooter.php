@@ -33,7 +33,7 @@ echo '
 	    <li><a href="sortiment.php">Sortiment</a></li> 
 		
 		<!-- Suchformular. Falsche Einträge werden mit Javascript rot markiert -->
-		<li><a href="#">Suche</a></li>
+		<li><a href="suche.php">Suche</a></li>
 		
 		<!-- Newsletter Anmeldung wenn nicht Admin-->
 		<li><a href="#">Newsletter</a></li>
