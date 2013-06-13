@@ -26,7 +26,7 @@ if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet'])
 else
 {
 	echo '<li><a href="auth/logout.php">Logout</a></li>
-	<li><a href="#">Warenkorb</a></li> ';
+	<li><a href="warenkorb.php">Warenkorb</a></li> ';
 }
 echo '
 		<!-- Zeigt alle Weine in der Datenbank an -->
