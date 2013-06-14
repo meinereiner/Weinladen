@@ -31,6 +31,62 @@ class mysql
 		return $this->admin;
 	}
 	
+	//Newsletterstatus abfragen
+	public function getnewsletterstatus()
+	{
+		$query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $this->id;
+		$result = $this->sendtodb2($query);
+		$row = mysql_fetch_assoc($result);
+		if($row["newsletter"] == 1)
+			return true;
+		else
+			return false;
+	}
+	
+	//Tabelle mit allen Newsletterabonnenten ausgeben
+	public function allnewsuser()
+	{
+		$query = "SELECT e_mail FROM benutzer WHERE newsletter = 1";
+		$result = $this->sendtodb2($query);
+		
+		//Tabelle erzeugen
+		echo "<table border='1'>\n";
+		echo "<tr>\n";
+		echo "<td>e-mail Adressen der Abonnenten</td>\n";
+		echo "</tr>\n";
+		
+		while($row = mysql_fetch_assoc($result))
+		{
+			echo "<tr>\n";
+			echo "<td>" . $row["e_mail"] . "</td>\n";
+			echo "</tr>\n";			
+		}
+		
+		echo "</table>";
+	}
+	
+	//Newsletterstatus invertieren
+	public function invertnewsletter()
+	{
+		$query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $this->id;
+		$result = $this->sendtodb2($query);
+		$row = mysql_fetch_assoc($result);
+		if($row["newsletter"] == 1)
+		{
+			$query = "UPDATE benutzer SET newsletter = 'FALSE' WHERE idbenutzer = " . $this->id;
+		}
+		else
+		{
+			$query = "UPDATE benutzer SET newsletter = 1 WHERE idbenutzer = " . $this->id;
+		}
+		
+		$this->sendtodb($query);
+			
+	}
+	
+	
+	
+	
 	public function getlands()
 	{
 		$landarray;
@@ -81,6 +137,8 @@ class mysql
 		$this->conn_id = mysql_connect($this->host,$this->user,$this->passwort);
 		//db auswählen
 		mysql_select_db($this->dbname,$this->conn_id);
+		
+		$this->sendtodb("SET NAMES 'utf8'");
 		
 		//Abfrage ob Verbindund ok	
 		if($this->conn_id === false)
@@ -208,6 +266,7 @@ class mysql
 		if(mysql_num_rows($result)==1)
 		{
 			$this->id = mysql_result($result, 0);
+			
 			//Benutzername speichern
 			$this->name = $name;
 			
@@ -342,7 +401,7 @@ class mysql
 	{
 		$query = "SELECT * FROM wein";
 		$result = $this->sendtodb2($query);
-		echo '<form action="warenkorb.php" method="post">'; 
+		echo "<form>"; 
 		
 		while($row = mysql_fetch_assoc($result))
 		{
@@ -360,14 +419,14 @@ class mysql
 			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
 						
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
-		echo '<input id="warenkorbButton" type="submit" value="Hinzufügen" />';
 		echo "</form>";
+		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
 	}
 	
 	public function winesorted($type = "", $land = "", $price = "")
@@ -405,7 +464,7 @@ class mysql
 		
 		
 		$result = $this->sendtodb2($query);
-		echo '<form action="warenkorb.php" method="post">'; 
+		echo "<form>"; 
 		while($row = mysql_fetch_assoc($result))
 		{
 			
@@ -420,17 +479,17 @@ class mysql
 			echo "		<li>" . $row["anbaugebiet"] . "</li>\n";
 			echo "		<li>" . $row["land"] . "</li>\n";
 			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
+			echo "		<li>" . $row["beschreibung"] . "</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
-		if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-			echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen"/>';
-		echo "</form>";			
+		echo "</form>";
+		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';		
 	}
 	
 	public function winelistbyname($namearray)
@@ -635,4 +694,5 @@ class mysql
         mysql_close($this->conn_id);
     } 
 }
+
 ?>
