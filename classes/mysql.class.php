@@ -494,8 +494,7 @@ class mysql
 			echo "		<li>" . $row["beschreibung"] . "</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';  
-			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';
 			echo "	</ul>\n";
 			echo "</div>\n";
 		};
@@ -591,11 +590,16 @@ class mysql
 	}
 	
 	//Übersicht der Bestellungen eines Kunden
-	public function getorder()
+	public function getorder($username)
 	{
+		//Benutzerid speichern
+        $query = "SELECT idbenutzer FROM benutzer WHERE benutzername='$username'";
+        $result = $this->sendtodb2($query);
+        $id = mysql_result($result, 0); 
+		
 		
 		//query erzeugen
-		$query = "SELECT * FROM bestellung WHERE benutzer_idbenutzer = $this->id";
+		$query = "SELECT * FROM bestellung WHERE benutzer_idbenutzer = $id";
 		//Datenbankanfrage senden
 		$result = $this->sendtodb2($query);		
 		

@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$_SESSION['warenkorb'] = $_POST['check_list'];
 	}
 }
+echo'<h3>Bisherige Bestellungen</h3>';
 $sql = new mysql();
-$sql->login("Simon","qwertz");
 if(!empty($_SESSION['warenkorb'])) 
 {
 	echo '<form action="common/bestellungAbschicken.php" method="post">'; 
@@ -22,6 +22,13 @@ if(!empty($_SESSION['warenkorb']))
 	echo "</form>";
 }
 else echo '<p>Warenkorb ist leer.</p>';
+
+echo'
+	<p>
+	<h3>Bisherige Bestellungen</h3>';
+	$sql->getorder($_SESSION['username']);
+	echo '
+	</p>';
 $sql->close_connect();
 
 include "./common/navigationFooter.php";
