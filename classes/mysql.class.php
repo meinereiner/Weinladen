@@ -464,7 +464,7 @@ class mysql
 		
 		
 		$result = $this->sendtodb2($query);
-		echo "<form>"; 
+		echo '<form method="post" action="warenkorb.php">'; 
 		while($row = mysql_fetch_assoc($result))
 		{
 			
@@ -482,7 +482,7 @@ class mysql
 			echo "		<li>" . $row["beschreibung"] . "</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>'; 
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>';  
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			echo "	</ul>\n";
 			echo "</div>\n";
