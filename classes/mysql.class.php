@@ -401,7 +401,7 @@ class mysql
 	{
 		$query = "SELECT * FROM wein";
 		$result = $this->sendtodb2($query);
-		echo "<form>"; 
+		echo '<form action="warenkorb.php" method="post">';  
 		
 		while($row = mysql_fetch_assoc($result))
 		{
@@ -419,14 +419,14 @@ class mysql
 			echo "		<li>" . number_format($row["preis"], 2, ',', '') . "€</li>\n";
 						
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" value="' . $row["name"] . '" name="check_list[]"> In Warenkorb </li>'; 
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
 			
 			echo "	</ul>\n";
 			echo "</div>\n";
 		}
+		echo '<input id="warenkorbButton" type="submit" value="Hinzufügen" />'; 
 		echo "</form>";
-		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';
 	}
 	
 	public function winesorted($type = "", $land = "", $price = "")
@@ -482,14 +482,14 @@ class mysql
 			echo "		<li>" . $row["beschreibung"] . "</li>\n";
 			
 			if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
-				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>';
+				echo ' <li> <input type="checkbox" class="WarenkorbCheckbox" name="' . $row["name"] . '" value="Hinzufügen"> In Warenkorb </li>'; 
 			echo "  <li>" . $row["beschreibung"] . "</li>\n"; 
-			
 			echo "	</ul>\n";
 			echo "</div>\n";
-		}
-		echo "</form>";
-		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen" />';		
+		};
+		if(isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'] == true) 
+     		echo ' <input id="warenkorbButton" type="submit" value="Hinzufügen"/>';
+    	echo "</form>";       	
 	}
 	
 	public function winelistbyname($namearray)

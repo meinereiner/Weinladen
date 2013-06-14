@@ -10,10 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$sql->createorder($_SESSION['username'], $_SESSION['warenkorb']); 
 		$_SESSION['warenkorb'] = [];
 		$sql->close_connect();
-		echo'
-		<script type="text/javascript">
-		alert("Benutzername oder Passwort unbekannt!");
-		</script> ';
 	}
 }
 $hostname = $_SERVER['HTTP_HOST'];
