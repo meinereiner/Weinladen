@@ -8,9 +8,7 @@ echo'
 	<h3>Weinliste</h3>
 ';
 $sql = new mysql();
-$sql->login("Simon","qwertz");
 $sql->winetable();
-$sql->close_connect();
 echo '
 </p>';
 
@@ -23,5 +21,13 @@ echo'
 	</form>
 	</p>';
 		  
+echo'
+	<p>
+	<h3>Bestellungen</h3>';
+	$sql->orderoverview();
+	echo '
+	</p>';
+	
+$sql->close_connect();
 include "./common/navigationFooter.php";
 ?>
