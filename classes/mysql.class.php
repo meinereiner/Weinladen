@@ -32,16 +32,22 @@ class mysql
 	}
 	
 	//Newsletterstatus abfragen
-	public function getnewsletterstatus()
-	{
-		$query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $this->id;
-		$result = $this->sendtodb2($query);
-		$row = mysql_fetch_assoc($result);
-		if($row["newsletter"] == 1)
-			return true;
-		else
-			return false;
-	}
+	public function getnewsletterstatus($username)
+    {
+        //Benutzerid speichern
+        $query = "SELECT idbenutzer FROM benutzer WHERE benutzername='$username'";
+        $result = $this->sendtodb2($query);
+        $id = mysql_result($result, 0);
+
+
+        $query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $id;
+        $result = $this->sendtodb2($query);
+        $row = mysql_fetch_assoc($result);
+        if($row["newsletter"] == 1)
+            return true;
+        else
+            return false;
+    } 
 	
 	//Tabelle mit allen Newsletterabonnenten ausgeben
 	public function allnewsuser()
@@ -66,18 +72,24 @@ class mysql
 	}
 	
 	//Newsletterstatus invertieren
-	public function invertnewsletter()
+	public function invertnewsletter($username)
 	{
-		$query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $this->id;
+		//Benutzerid speichern
+        $query = "SELECT idbenutzer FROM benutzer WHERE benutzername='$username'";
+        $result = $this->sendtodb2($query);
+        $id = mysql_result($result, 0); 
+		
+		
+		$query = "SELECT newsletter FROM benutzer WHERE idbenutzer = " . $id;
 		$result = $this->sendtodb2($query);
 		$row = mysql_fetch_assoc($result);
 		if($row["newsletter"] == 1)
 		{
-			$query = "UPDATE benutzer SET newsletter = 'FALSE' WHERE idbenutzer = " . $this->id;
+			$query = "UPDATE benutzer SET newsletter = 'FALSE' WHERE idbenutzer = " . $id;
 		}
 		else
 		{
-			$query = "UPDATE benutzer SET newsletter = 1 WHERE idbenutzer = " . $this->id;
+			$query = "UPDATE benutzer SET newsletter = 1 WHERE idbenutzer = " . $id;
 		}
 		
 		$this->sendtodb($query);

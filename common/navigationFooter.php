@@ -34,10 +34,15 @@ echo '
 		
 		<!-- Suchformular. Falsche Einträge werden mit Javascript rot markiert -->
 		<li><a href="suche.php">Suche</a></li>
-		
+';
+if (isset($_SESSION['angemeldet']) && $_SESSION['angemeldet'])
+{
+	echo '
 		<!-- Newsletter Anmeldung wenn nicht Admin-->
 		<li><a href="newsletter.php">Newsletter</a></li>
 		';
+}
+
 if (isset($_SESSION['administrator']) && $_SESSION['administrator'])
 {
 	echo '<li><a href="admin.php">Admin</a></li>';

@@ -1,12 +1,17 @@
 <?php
 include "./auth/session.php";
 include "./classes/mysql.class.php";
+
+$sql = new mysql();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	$sql->invertnewsletter($_SESSION['username']);
+}
+
 include "./common/head.html";
 
 echo'
 	<p>
 ';
-$sql = new mysql();
 
 echo '
 </p>';
@@ -14,18 +19,20 @@ echo '
 echo'
 	<p>
 	<h3>Newsletter</h3>';
-	if($_SESSION['administrator'] == true)
+	if(isset($_SESSION['administrator']) && $_SESSION['administrator'] == true)
 	{
 		echo "<h3>Liste aller Newsletterabonennten</h3>";
 		$sql->allnewsuser();
 	}
 	else
 	{
-		if($sql->getnewsletterstatus())
-			echo '<form><input type="button"  value="Newsletter abbestellen" onclick="window.location.reload();changeNewsletter()" />';
+		echo '<form method="post" action="newsletter.php">';
+		if($sql->getnewsletterstatus($_SESSION['username']))
+			echo '<form><input type="submit"  value="Newsletter abbestellen" />';
 		else
-			echo '<input type="button"  value="Newsletter bestellen" onclick="window.location.reload();changeNewsletter()" /></form>';	
+			echo '<input type="submit"  value="Newsletter bestellen" />';	
 		}
+		echo '</form>';
 echo'</p>';
 $sql->close_connect();		  
 include "./common/navigationFooter.php";
