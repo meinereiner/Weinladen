@@ -7,7 +7,6 @@ echo'
 <h3>Sortiment</h3>
 ';
 $sql = new mysql();
-$sql->login("Simon","qwertz");
 $sql->winelist();
 echo "
 <div id='excel'>
