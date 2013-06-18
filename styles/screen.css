@@ -79,6 +79,10 @@ a:hover, a:active {
 	padding: 10px;
 }
 
+#excel {
+	clear: right;
+}
+
 /* --- Layout linke Navigationsleiste --- */
 #left ul{
 	list-style-type: none;
